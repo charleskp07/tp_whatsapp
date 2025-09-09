@@ -1,8 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+// import 'package:whatsapp/pages/home/home.dart';
+import 'package:whatsapp/providers/user.dart';
 import 'pages/auth/login.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp( MultiProvider(
+    providers: [
+      ChangeNotifierProvider(
+        create: (_) => UserProvider()
+      ),
+    ],
+    child: MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -14,10 +24,11 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Whatsapp',
       theme: ThemeData(
-        
+      
         colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF128C7E)),
       ),
       home: const MyHomePage(title: 'Whatsapp'),
+      // home: const HomeScreen(),
     );
   }
 }

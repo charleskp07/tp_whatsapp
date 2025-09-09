@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:whatsapp/pages/auth/otpcode.dart';
+import 'package:whatsapp/providers/user.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -9,6 +11,16 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  @override
+  void initState() {
+    super.initState();
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    // Récupération initiale des users
+    print(userProvider.fetchUsers());
+
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
