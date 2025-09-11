@@ -25,13 +25,17 @@ class UserModel{
 
 
   // Convert User Model to Json
-  Map<String,dynamic> toJson() {
-  return {
-    'id': id,
-    'name': name,
-    'email': email,
-    'password': password,
-    'phone_number': phone_number};
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = {
+      'name': name,
+      'email': email,
+      'phone_number': phone_number,
+    };
+    if (password != null) {
+      // On ajoute le mot de passe seulement s'il existe
+      data['password'] = password;
+    }
+    return data;
   }
 
 

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:whatsapp/pages/auth/otpcode.dart';
-import 'package:whatsapp/providers/user.dart';
+import 'package:whatsapp/models/user.dart';
+import 'package:whatsapp/pages/home/home.dart';
+import 'package:whatsapp/providers/auth.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -11,30 +12,41 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  @override
-  void initState() {
-    super.initState();
-    final userProvider = Provider.of<UserProvider>(context, listen: false);
-    // Récupération initiale des users
-    print(userProvider.fetchUsers());
+  bool _isLoading = false;
+  int loginState = 0;
 
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   final userProvider = Provider.of<UserProvider>(context, listen: false);
+  //   // Récupération initiale des users
+  //   print(userProvider.fetchUsers());
 
+  // }
 
   @override
   Widget build(BuildContext context) {
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+
+    TextEditingController emailController = TextEditingController();
+
     return Scaffold(
       body: Center(
-         
         child: Padding(
           padding: EdgeInsetsGeometry.all(16),
           child: Column(
             spacing: 20,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              Text(
+                !_isLoading && loginState == -1 
+                ? "Info invalide" 
+                : ""
+              ),
               TextField(
+                controller: emailController,
                 decoration: InputDecoration(
-                  label: Text("E-mail"), 
+                  label: Text("E-mail"),
                   hintText: "Saisir votre adresse email",
                   border: OutlineInputBorder(),
                 ),
@@ -45,26 +57,67 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
 
               ElevatedButton(
-                style: ButtonStyle(backgroundColor: WidgetStateProperty.all(Color(0xFF128C7E))),
-
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => OtpCodeScreen()),
-                  );
-                } ,
-                child: 
-                Text( 
-                  'Envoyer',
-                  style: TextStyle(color: Color(0xFFFFFFFF)),
+                style: ButtonStyle(
+                  backgroundColor: WidgetStateProperty.all(Color(0xFF128C7E)),
                 ),
 
+                onPressed: () async {
+                  try {
+                    if (!_isLoading && emailController.text != "") {
+                      setState(() {
+                        _isLoading = true;
+                      });
+                      UserModel user = UserModel(
+                        name: "ckp",
+                        email: emailController.text,
+                        phone_number: "+228XXXXXXX",
+                        password: "password",
+                      );
+
+                      int mState = await authProvider.login(user);
+
+                      print(await authProvider.login(user));
+
+                      setState(() async {
+                        loginState = mState;
+                        _isLoading = false;
+                      });
+                    }
+                  } catch (e) {
+                    setState(() {
+                      loginState = -1;
+                    });
+                    print(e);
+                    setState(() {
+                      _isLoading = false;
+                    });
+                  }
+                  if (loginState == 1) {
+                    await Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => HomeScreen()),
+                    );
+                  }
+                },
+                child: _isLoading
+                    ? SizedBox(
+                        width: 15,
+                        height: 15,
+                        child: const CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                            Colors.white,
+                          ),
+                          strokeWidth: 2,
+                        ),
+                      )
+                    : Text(
+                        'Envoyer',
+                        style: TextStyle(color: Color(0xFFFFFFFF)),
+                      ),
               ),
             ],
           ),
-          
         ),
-        
       ),
     );
   }
