@@ -29,7 +29,7 @@ class ApiService {
   // Add a new User
   Future<void> addUser(UserModel user) async {
     try {
-      await _dio.post('/users', data: user.toJson());
+      await _dio.post('/register', data: user.toJson());
     } catch (e) {
       // Error :
     }

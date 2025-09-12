@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:whatsapp/providers/auth.dart';
 // import 'package:whatsapp/providers/contact.dart';
 // import 'package:whatsapp/providers/discussion.dart';
-// import 'package:whatsapp/pages/home/home.dart';
+import 'package:whatsapp/pages/home/home.dart';
 import 'package:whatsapp/providers/user.dart';
 import 'pages/auth/login.dart';
 
@@ -38,8 +38,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF128C7E)),
       ),
-      home: const MyHomePage(title: 'Whatsapp'),
-      // home: const HomeScreen(),
+      // home: const MyHomePage(title: 'Whatsapp'),
+      home: const HomeScreen(),
     );
   }
 }

@@ -15,20 +15,14 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _isLoading = false;
   int loginState = 0;
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   final userProvider = Provider.of<UserProvider>(context, listen: false);
-  //   // Récupération initiale des users
-  //   print(userProvider.fetchUsers());
 
-  // }
 
   @override
   Widget build(BuildContext context) {
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
 
     TextEditingController emailController = TextEditingController();
+    // TextEditingController passwordController = TextEditingController();
 
     return Scaffold(
       body: Center(
@@ -38,11 +32,7 @@ class _LoginScreenState extends State<LoginScreen> {
             spacing: 20,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
-                !_isLoading && loginState == -1 
-                ? "Info invalide" 
-                : ""
-              ),
+              Text(!_isLoading && loginState == -1 ? "Info invalide" : ""),
               TextField(
                 controller: emailController,
                 decoration: InputDecoration(
@@ -55,6 +45,19 @@ class _LoginScreenState extends State<LoginScreen> {
                   //OK
                 },
               ),
+
+              // TextField(
+              //   controller: passwordController,
+              //   decoration: InputDecoration(
+              //     label: Text("Mot de passe"),
+              //     hintText: "Saisir votre mot de passe ",
+              //     border: OutlineInputBorder(),
+              //   ),
+              //   keyboardType: TextInputType.datetime,
+              //   onChanged: (value) {
+              //     //OK
+              //   },
+              // ),
 
               ElevatedButton(
                 style: ButtonStyle(
@@ -78,7 +81,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                       print(await authProvider.login(user));
 
-                      setState(() async {
+                      setState(()  {
                         loginState = mState;
                         _isLoading = false;
                       });
